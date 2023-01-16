@@ -63,6 +63,8 @@ public class ClientExecuteCommand implements Command<ClientCommandArgs> {
             String clusterName = clientCommandArgs.getClusterName();
             if (clientCommandArgs.getMasterType().equals(MasterType.LOCAL)) {
                 clusterName = creatRandomClusterName(clusterName);
+                //创建HazelcastInstance，Hazelcast是开源的可嵌入式的，分布式集群、分布式缓存。jar包形式。主要为jdk的map、list、queue等实现了分布式
+                //启动seatunnel server
                 instance = createServerInLocal(clusterName);
             }
             seaTunnelConfig.getHazelcastConfig().setClusterName(clusterName);
@@ -108,6 +110,7 @@ public class ClientExecuteCommand implements Command<ClientCommandArgs> {
     private HazelcastInstance createServerInLocal(String clusterName) {
         SeaTunnelConfig seaTunnelConfig = ConfigProvider.locateAndGetSeaTunnelConfig();
         seaTunnelConfig.getHazelcastConfig().setClusterName(clusterName);
+        //通过hazelcast框架启动SeaTunnel server
         return HazelcastInstanceFactory.newHazelcastInstance(seaTunnelConfig.getHazelcastConfig(),
             Thread.currentThread().getName(),
             new SeaTunnelNodeContext(seaTunnelConfig));
